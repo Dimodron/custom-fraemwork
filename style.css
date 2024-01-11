@@ -1,0 +1,99 @@
+body, html{margin:0; padding: 0;}
+body{background-position: top;background-size:cover;background-attachment:fixed;background-repeat: no-repeat;width:100%;}
+/****************************************************************************/
+.bot{position:fixed;bottom:0px;right:0px;}
+.bot img{position:fixed;bottom:0px;right:0px;max-height:200px}
+.dialog {position:fixed;border:2px solid;width:400px;bottom:140px;right:210px;border-radius:20px 20px 0px 20px;padding:10px;background:white;}
+.answer{bottom:10px;right:210px;position:fixed;list-style:none;border:2px solid;border-radius:20px 20px 20px 0px;padding:10px;width:300px;background:#3bd68f;}
+.answer ul li:hover{background:#880a2b;border-radius:5px;}
+/****************************************************************************/
+
+.torch{height:65px;position:absolute;right:640;}
+.torch:hover{cursor:pointer;}
+.foxy{position:absolute;height:90px;left:150;top:-10px;}
+.search {height:70px;position:absolute;top:0px;right:0px;}
+.search img {height:70px;}
+.search input {outline:none;;position:absolute;right:100px;top:20;height:35px;border-radius:20px;width:300px;font-size:15px;}
+.drop_list {display:none;border:2px solid rgb(171, 164, 164);;background:rgba(255, 250, 77, 0.24);width:300px;min-height:100px;position:absolute;right:100px;top:60px;border-radius:20px;z-index:10;}
+.site_cap{;background:rgb(255, 248, 110);width:100%;height:70px; }
+/*.site_basement{background:rgb(218, 53, 109);width:100%;height:100px;}
+/****************************************************************************/
+.slideshow{overflow:hidden;width:100%;height:350px;margin-bottom:20px;background:rgba(219, 133, 130, 0.47);margin-top: 20px;}
+/****************************************************************************/
+.new_chap_select_m {border:2px solid rgb(212, 165, 162);border-radius:5px;width:75%;height:200px;background:rgba(236, 197, 196, 0.42);margin:20px;}
+.new_chap_select_m div:first-child{line-height:50px;font-size:20px;text-align:center;height:50px;background:rgb(224, 189, 186);padding:0px;margin:0px;}
+.new_chap_select_ {border:2px solid rgb(212, 165, 162);border-radius:5px;width:75%;height:200px;background:rgba(236, 197, 196, 0.42);margin:20px;}
+.new_chap_select_m div:first-child{line-height:50px;font-size:20px;text-align:center;height:50px;background:rgb(224, 189, 186);padding:0px;margin:0px;}
+/****************************************************************************/
+.new_chap_popular_m {border:2px solid rgb(212, 165, 162);border-radius:5px;;width:75%;height:200px;background:rgba(236, 197, 196, 0.42);margin:20px;}
+.new_chap_popular_m div:first-child{line-height:50px;font-size:20px;text-align:center;height:50px;background:rgb(224, 189, 186);padding:0px;margin:0px;}
+/****************************************************************************/
+.latest_updates {border:2px solid rgb(212, 165, 162);border-radius:5px;width:75%;min-height:500px;background:rgba(236, 197, 196, 0.42);margin:20px;}
+.latest_updates div:first-child{line-height:50px;font-size:20px;text-align:center;height:50px;background:rgb(224, 189, 186);padding:0px;margin:0px;}
+/****************************************************************************/
+.popular_m{border-radius:5px;border:2px solid rgb(212, 165, 162);width:20%;min-height:900px;background:rgba(236, 197, 196, 0.42);position:absolute;right:20px;top:460}
+.popular_m ul {padding:0px;margin:0px;list-style:none;}
+.popular_m .zagolovok{line-height:50px;font-size:20px;text-align:center;height:50px;background:rgb(224, 189, 186);padding:0px;margin:0px;}
+/****************************************************************************/
+.content img{height:50px;float:left;margin-right:10px;margin-left:10px;}
+.content a{text-decoration:none; }
+.content {width:100%;max-height:100px;margin-top:20px;}
+.content h1{font-size:20px;width:100%;margin:0px;padding:0px;}
+/****************************************************************************/
+.site_cap ul{list-style:none;padding:0px;text-align:center}
+.site_cap li{float:left;height:55px;width:100px;border:1px solid rgba(10, 10, 10, 0.1);background:rgb(255, 250, 77);margin-top:5;margin-left:10px;}
+/****************************************************************************/
+.slideshow ul{padding:0px;margin:0px;list-style:none;width:1000%;position: relative;}
+.slideshow li{height:350px;float:left;background-repeat: no-repeat;background-size: cover;background-position-y:0px;text-align: center;}
+.slideshow li a{margin-top: 100px;}
+.slideshow .left {z-index:100;text-align: center;font-size:100px;color: rgba(0,0,0);height:350px;width:100px;background:rgba(182, 18, 14, 0.61);position: absolute;left:0px;line-height:350px;}
+.slideshow .right {z-index:100;text-align: center;font-size:100px;color: rgba(0,0,0);height:350px;width:100px;background:rgba(182, 18, 14, 0.61);position: absolute;right:0px;line-height:350px;}
+/****************************************************************************/
+.picture_anim,.picture_man{background:rgba(219, 133, 130, 0.47);float:left;padding:5px;margin:5px;}
+.description_anim,.description_man{background:rgba(219, 133, 130, 0.47);min-height:400px;padding:9px;margin:5px;margin-left:320px;}
+.anime_reader,.manga_reader{background:rgba(219, 133, 130, 0.47);min-height:600px;width:1220px;margin:auto;margin-bottom:10px;overflow:hidden;}
+.picture_anim img,.picture_man img {width:300px;}
+.jumpchapter{height:20px;margin-bottom:10px;text-align:center;}
+.jumpchapter select{width:1200;height:20px;}
+.anime_series,.manga_chapter{width:1200;height:30px;margin:10px;text-align:center;font-size:20px;font-style:italic;font-family:monospace;}
+.manga_reader ul {list-style:none;margin:0px;padding:0px;text-align:center;}
+.manga_reader img{min-height:600px;max-width:1200px;}
+.manga_reader select{margin-left:500px;width:200px;margin-top:10px;margin-bottom:10px;font-size:20px;font-style:italic;font-family:monospace;}
+/****************************************************************************/
+.anime_wind{width:1000px;min-height:500px;background:rgba(219, 133, 130, 0.47);text-align:center;margin:auto;margin-bottom:20px;border-radius:20px}
+.anime_wind iframe{margin-top:50px;}
+fieldset{border-radius:20px;text-align:left;font-size:20px;font-style:italic;font-family:monospace;color:red;border:3px solid rgb(212, 165, 162);}
+.screen {padding:10px;width:977px;min-height:100px;background:rgba(219, 133, 130, 0.47);text-align:center;margin:auto;margin-bottom:20px;border-radius:20px}
+.screen img{max-height:150px;margin:5px;}
+#zoom{position: fixed;height:100%;width:100%;left:0px;top:0px;background-color:rgba(0,0,0,1);display:none;}
+#zoom img{height:95%;left:0px;top:0px;position:absolute;}
+/****************************************************************************/
+.anime_menu{width:1200px;min-height:500px;background:rgba(236, 197, 196, 0.42);margin:auto;margin-top:15px;margin-bottom:15px;border-radius:20px;border:3px solid rgb(212, 165, 162)}
+.anime_menu a{text-decoration:none;}
+.anime_menu ul{list-style:none;padding:0px;}
+.anime_menu li{background:rgba(219, 133, 130, 0.47);margin-top:10px;}
+.anime_menu li div{min-height:120px;color:rgb(162, 48, 13);font-size:20px;}
+.anime_menu li div img{height:20px;float:none;margin:0px;}
+.anime_menu li span{color:rgb(0, 0, 0);font-size:25px;}
+.anime_menu li img {height:100px;float:left;margin:10px;}
+/****************************************************************************/
+.manga_menu{width:1200px;min-height:500px;background:rgba(236, 197, 196, 0.42);margin:auto;margin-top:15px;margin-bottom:15px;border-radius:20px;border:3px solid rgb(212, 165, 162)}
+.manga_menu a{text-decoration:none;}
+.manga_menu ul{list-style:none;padding:0px;}
+.manga_menu li{background:rgba(219, 133, 130, 0.47);margin-top:10px;}
+.manga_menu li div{min-height:120px;color:rgb(162, 48, 13);font-size:20px;}
+.manga_menu li span{color:rgb(0, 0, 0);font-size:25px;}
+.manga_menu li img {height:100px;float:left;margin:10px}
+/****************************************************************************/
+.drop_list ul {padding:5px;margin:0px;list-style:none;}
+.drop_list ul img {border-radius:5px;;width:30px;float:left;margin-right:5px}
+.drop_list li {border-radius:5px;;padding:5px;background-color:#352f2f91;width:210px;min-height:45px;margin:0 auto;margin-bottom:5px;}
+.drop_list li span{text-align:center;color:rgb(251, 248, 248)}
+.drop_list li span:last-child{font-size:12px;color:rgb(255, 255, 255);background:rgb(152, 6, 27);padding:1px}
+.drop_list li:hover{background:rgb(154, 150, 150);cursor:pointer;}
+.drop_list a{text-decoration: none;}
+/****************************************************************************/
+.user_autoriz{display:none;position:fixed;border:2px solid;width:400px;bottom:140px;right:210px;border-radius:20px 20px 0px 20px;padding:10px;background:white;}
+.user_registration{display:none;position:fixed;border:2px solid;width:400px;bottom:140px;right:210px;border-radius:20px 20px 0px 20px;padding:10px;background:white;}
+/***************************************************************************/
+.admin_menu{width:300px;border:2px solid rgb(14, 13, 13);background:rgb(206, 204, 204);min-height:800px;margin:5px;border-radius:5px}

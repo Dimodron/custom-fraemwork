@@ -1,0 +1,628 @@
+<?php	 		 		 	
+
+class tpl_gallery {
+
+function gallery_show($data) {
+global $mkportals, $mklib;
+$mklib->css_list[] = $mklib->siteurl.'/portal/include/js/smoothness/blueimp-gallery.css';
+if (in_array($mklib->platform, array('mobile', 'iphone', 'ipad', 'android', 'tablet'))) {
+	$mklib->js_list[] = "$mklib->siteurl/portal/include/js/jquery.hammer.js";
+	$script = "
+			$('.gallerycontent').hammer().on('swipeleft', function(ev) {
+ 					page = $('span.mkpagecurrent').next('span.mkpagelink').find('a').attr('href');
+					if (page) {
+						location.href = page;
+					}
+		    });
+			$('.gallerycontent').hammer().on('swiperight', function(ev) {
+ 					page = $('span.mkpagecurrent').prev('span.mkpagelink').find('a').attr('href');
+					if (page) {
+						location.href = page;
+					}
+		    });
+			$('.foto_thumb').hammer().on('pinchout', function(ev) {
+					ev.preventDefault();
+ 					link = $(this).find('.foto_desc a').attr('href');
+					if (link) {
+						location.href = link;
+					}
+            });
+	";
+}
+
+return <<<EOF
+	<script type="text/javascript" src="$mklib->siteurl/portal/include/js/jquery.blueimp-gallery.js"></script>
+	<script type="text/javascript" src="$mklib->siteurl/portal/include/js/jquery.typeahead.js"></script>
+	<script type="text/javascript">
+		  <!--
+	    function ValidateCard() {
+		    var Check = 0;
+		    if (document.postcard.titlecard.value == '') { Check = 1; }
+		    if (document.postcard.dest.value == '') { Check = 1; }
+		    if (document.postcard.emaildest.value == '') { Check = 1; }
+		    if (document.postcard.you.value == '') { Check = 1; }
+		    if (document.postcard.ta.value == '') { Check = 1; }
+		    if (Check == 1) {
+			    alert("{$mklib->lang['ga_mustcompile']}");
+			    return false;
+		    } else {
+			    return true;
+		    }
+	    }
+		function selChd(jumpsection) {
+			 var selIdx = jumpsection.selectedIndex;
+			 var newSel = jumpsection.options[selIdx].value;
+			 location.href='{$mklib->siteurl}/index.php?ind=gallery&op=section_view&idev=' + newSel;
+		}
+		function selChoc(jumpsection) {
+			 var selIdx = jumpsection.selectedIndex;
+			 var newSel = jumpsection.options[selIdx].value;
+			 location.href='{$mklib->siteurl}/index.php?ind=gallery&order=' + newSel;
+		}
+		function selChoe(jumpsection, idev) {
+			 var selIdx = jumpsection.selectedIndex;
+			 var newSel = jumpsection.options[selIdx].value;
+			 location.href='{$mklib->siteurl}/index.php?ind=gallery&op=section_view&idev=' + idev + '&order=' + newSel;
+		}
+		$(document).ready(function(){
+			$('#start_slide').click(function () {
+				var gallery = blueimp.Gallery(
+				document.getElementById('links').getElementsByTagName('a'),
+				  {
+					  startSlideshow: false
+				  }
+				);
+				return false;
+			});
+			$("#enter_name").typeahead({
+				name: 'gallery_search',
+				remote: '{$mklib->siteurl}/index.php?ind=gallery&op=fastsearch&testo=%QUERY', 
+				limit: 10,
+				timeout:10
+			});
+			$('.photo_delete').click(function () {
+				makesure('{$mklib->lang[ga_delimgconfirm]}');
+			});
+			{$script}
+		 });
+		  //-->
+	</script>
+<div id='modgallery'>
+    <div id='submit'>
+             <div id='searchbox'>
+                <form action='{$mklib->siteurl}/index.php?ind=gallery&amp;op=result_search' name='search' method='post'>
+                    <input type='text' name='testo' id='enter_name' />
+                    <input type='submit' value='' class='search_button' />
+                </form>
+             </div>
+             {$data['submit']}
+    </div>
+    <div id='navstrip' xmlns:v="http://rdf.data-vocabulary.org/#">{$data['navbar']}</div>
+    <div class='clear'></div>
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+	</div>
+    <div class='gallerycontent'>
+            {$data['content']}
+            <div>{$data['tags']}</div>
+            {$data['thumbs']}
+    </div>
+    
+    <div class='clear'></div>
+    
+	<div id='pagination'>
+            {$data['pages']}
+	</div>
+  
+    <div id='toolbar'>
+    		{$data['toolbar']}
+    </div>
+</div>
+            
+EOF;
+}
+
+function show_stat($stats) {
+global $mkportals, $mklib;
+return <<<EOF
+
+	        <div class="mktitlemedium"><b>{$mklib->lang['gat_stats']}</b></div>
+            <div class='stats'>
+                <img src="$mklib->images/stats.gif" alt="" style='float:left;' />$stats
+            </div>
+EOF;
+}
+
+function show_online($users) {
+global $mkportals, $mklib;
+return <<<EOF
+
+            <div class='online'>$users</div>
+EOF;
+}
+
+function row_main_category() {
+global $mkportals, $mklib;
+return <<<EOF
+
+<!-- START explaincatparent START -->
+            <table width="100%" border="0" cellspacing="1" cellpadding="5" class='catstable'>
+                        <tr>
+                          <th class="mktitlemedium" width="160" align="center">{$mklib->lang['gat_prev']}</th>
+                          <th class="mktitlemedium" width="60%" colspan="2" align="center">{$mklib->lang['ga_category']}</th>
+						  <th class="mktitlemedium" width="10%" align="center">{$mklib->lang['gat_subcat']}</th>
+                          <th class="mktitlemedium" width="10%" align="center">{$mklib->lang['gat_images']}</th>
+                          <th class="mktitlemedium" width="10%" align="center">{$mklib->lang['gat_lentry']}</th>
+                        </tr>
+EOF;
+}
+
+function row_main_category_end() {
+return <<<EOF
+			</table>
+EOF;
+}
+
+function row_getnew_category() {
+global $mkportals, $mklib;
+return <<<EOF
+
+<!-- START explaincatparent START -->
+            <table width="100%" border="0" cellspacing="1" cellpadding="5" class='catstable'>
+                        <tr>
+                          <th class="mktitlemedium" width="160" align="center">{$mklib->lang['gat_prev']}</th>
+                          <th class="mktitlemedium" width="60%" colspan="2" align="center">{$mklib->lang['ga_title']}</th>
+						  <th class="mktitlemedium" width="10%" align="center">{$mklib->lang['gat_sendby']}</th>
+                          <th class="mktitlemedium" width="10%" align="center">{$mklib->lang['comments']}</th>
+                          <th class="mktitlemedium" width="10%" align="center">{$mklib->lang['last']}</th>
+                        </tr>
+EOF;
+}
+
+function row_main_category_content($name, $image, $description, $totfile, $lastentry, $checksub) {
+global $mkportals;
+return <<<EOF
+			<tr>
+              <td class="modulecell" align="center">{$image}</td>
+              <td class="modulecell" colspan="2" align="left"><b>{$name}</b><br /><span class="modulelite">{$description}</span></td>
+			  <td class="modulecell" nowrap='nowrap' align="center">{$checksub}</td>
+			  <td class="modulecell" align="center">{$totfile}</td>
+              <td class="modulecell" nowrap='nowrap' align="left">{$lastentry}</td>
+			</tr>
+EOF;
+}
+
+function row_main_category_sort($id) {
+global $mkportals, $mklib;
+return <<<EOF
+			<div class="category_sort" align="center"><b>
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=list">{$mklib->lang['list_all']}</a> - 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=num">#</a>
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=A">A</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=B">B</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=C">C</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=D">D</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=E">E</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=F">F</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=G">G</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=H">H</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=I">I</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=J">J</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=K">K</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=L">L</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=M">M</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=N">N</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=O">O</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=P">P</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=R">R</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=S">S</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=T">T</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=U">U</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=V">V</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=W">W</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=X">X</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=Y">Y</a> 
+              <a href="{$mklib->siteurl}/index.php?ind=gallery&amp;op=section_view&amp;idev=$id&amp;name=Z">Z</a> 
+              </b>
+			</div>
+EOF;
+}
+
+function tags_cloud($tags) {
+global $mkportals, $mklib;
+$width = ($mklib->modconf['gallery']['thb_width']*1.4)."px";
+return <<<EOF
+<div class='tags_cloud' style='width: $width;'><h3>{$mklib->lang['tags']}</h3><ul>$tags</ul></div>
+EOF;
+}
+
+function row_toolbar($jump="", $sort="") {
+global $mkportals, $mklib;
+return <<<EOF
+<table border="0" cellspacing="0" cellpadding='0'>
+  <tr>
+      <td width="95%">&nbsp;</td>
+      <td align="right" class="moduleborder" nowrap="nowrap">
+      </td>
+  </tr>
+</table>
+EOF;
+}
+
+function foto_show($photo) {
+global $mkportals, $mklib;
+
+$MOBILE_REGEX = "/mobile|tablet|ip(ad|hone|od)|android|silk/i";
+if (preg_match($MOBILE_REGEX, $_SERVER['HTTP_USER_AGENT']))
+	$script = "
+            $('#gallery_photo').hammer().on('pinchin', function(ev) {
+ 					ratio = document.width / window.innerWidth;
+                   	parent = '{$mklib->siteurl}/index.php?ind=gallery&op=section_view&idev={$photo['evento']}';
+ 					if (ratio <= 1)
+	               		location.href = parent;	
+            });
+            $('#gallery_photo').hammer().on('swipeleft', function(ev) {
+                next = $('.photonext a').attr('href');
+                if (next) {
+                   $('#gallery_photo').addClass('loading');
+                   $.ajax({ 
+                        url:     next + '&ajax=1',
+                        type:     'POST', 
+                        dataType: 'html', 
+                        success: function (response) {
+                        	$('.gallerycontent').html(response);
+                        	$('#gallery_photo').removeClass('loading');
+                        }
+                    });	
+                 }   
+            });
+            $('#gallery_photo').hammer().on('swiperight', function(ev) {
+                prev = $('.photoprev a').attr('href');
+                if (prev) {
+                   $('#gallery_photo').addClass('loading');
+                   $.ajax({ 
+                        url:     prev + '&ajax=1',
+                        type:     'POST', 
+                        dataType: 'html', 
+                        success: function (response) {
+                        	$('.gallerycontent').html(response);
+                        	$('#gallery_photo').removeClass('loading');
+                        }
+                    });	
+                }   
+            });
+";
+
+if ($mkportals->member['id']) {
+			$bookmark = " &nbsp; <a href=\"javascript:PopUp('$mkportals->forum_url/index.php?act=UserCP&amp;CODE=57&amp;id1={$photo['id']}&amp;type=gallery','BookmarkDetails','470','300','0','1','1','1')\" title='{$mklib->lang['add_bookmark']}'><img src='$mklib->images/bookmark.png' alt='Add Bookmark' /></a>";
+}
+    
+if ($mklib->modconf['gallery']['tag_cloud']) {
+	$addtag = "<tr class='modulecell'>
+                                  <td valign='top' align='right'><b>{$mklib->lang['tags']}</b></td>
+                                  <td align='left'><ul class='pic_tags' id='ajax_tags'>{$photo['tags']}</ul>";
+    if($mkportals->member['g_access_cp'] || $mklib->member_rights['gallery']['manage']) {
+        $addtag.= "
+        <script language='Javascript' type='text/javascript'>
+        <!--
+        $(document).ready(function(){ 
+            $('#ajax_tags > li').append(' <a href=\"#\" class=\"remove_tag\"></a>'); 
+            $('.remove_tag').click(function() { 
+				var tag = $(this).prev('a').text(); 
+				if (tag) {
+    	            $.post('{$mklib->siteurl}/index.php?ind=gallery&op=remove_tag&id={$photo['id']}', {testo: tag}, function(data){ $('#ajax_tags').html(data);}).done(function() {
+							$('#ajax_tags > li').append(' <a href=\"#\" class=\"remove_tag\"></a>');
+						});
+				}
+	   	        return false; 
+            }); 
+            $('#submit_tag').click(function() { 
+				var tag = $('#enter_tag').val(); 
+				if (tag) {
+    	            $.post('{$mklib->siteurl}/index.php?ind=gallery&op=add_tag&id={$photo['id']}', {testo: tag}, function(data){ $('#ajax_tags').html(data);}).done(function() {
+							$('#ajax_tags > li').append(' <a href=\"#\" class=\"remove_tag\"></a>');
+						});
+				}
+            	$('#addtag_open').slideToggle('fast');
+	            return false; 
+            }); 
+       });
+        //-->
+        </script>
+        <a href=\"javascript: ShowHide('addtag_open')\" class='slidemenu' title='{$mklib->lang['add_tag']}'><img src='$mklib->images/plus.png' alt='{$mklib->lang['add_tag']}' align='top'/></a>
+                <div id='addtag_open' style='display:none;'>
+                        <input type='text' name='testo' id='enter_tag' />
+                        <input type='submit' value=' ' id='submit_tag' />
+                </div>";
+    }
+    $addtag.= "</td>
+              </tr>";
+}
+return <<<EOF
+    <script language='Javascript' type='text/javascript'>
+	<!--
+function PopUp(url, name, width,height,center,resize,scroll,posleft,postop) {
+    if (posleft != 0) { X = posleft }
+    if (postop  != 0) { Y = postop  }
+    if (!scroll) { scroll = 1 }
+    if (!resize) { resize = 1 }
+    if ((parseInt (navigator.appVersion) >= 4 ) && (center)) {
+      X = (screen.width  - width ) / 2;
+      Y = (screen.height - height) / 2;
+    }
+    if (scroll != 0) { scroll = 1 }
+    var Win = window.open( url, name, 'width='+width+',height='+height+',top='+Y+',left='+X+',resizable='+resize+',scrollbars='+scroll+',location=no,directories=no,status=no,menubar=no,toolbar=no');
+}
+		 $(document).ready(function(){
+	        	$('#image').hide();
+			width = ~~($('#modgallery').width());
+			if ({$photo['width']} > width) $('#image').width('100%');
+	        	$('#image').show();
+			$("#enter_tag").typeahead({
+				name: 'gallery_tags',
+				remote: '{$mklib->siteurl}/index.php?ind=gallery&op=fastsearch&testo=%QUERY', 
+				limit: 10,
+				timeout:10
+            });
+			$('#wide').click(function() {
+				var url = $('#wide').attr('href');
+				$('#image').attr('src', url);
+				return false; 
+			});
+			$('#normal').click(function() {
+				var url = $('#normal').attr('href');
+				$('#image').attr('src', url);
+				return false; 
+			}); 
+            $('a.publish').click(function() {
+				var url = $(this).attr('href');
+				$.post(url, {ajax: 1});
+   	        	$(this).remove();
+    	        return false; 
+            }); 
+
+            {$script}
+		 });
+	//-->
+	</script>
+                <div align='center' id='fotochange'>
+                	<div class='photoprev linkopacity'>{$photo['photo_prew']}</div>
+                    <div class='photonext linkopacity'>{$photo['photo_next']}</div>
+                </div>
+                <div class='clear'></div>
+                 	<div class='img-shadow' id='gallery_photo'><a href='{$mklib->siteurl}/portal/upload/gallery/{$photo['file']}' title='{$photo['title']}' target='_blank' data-gallery><img src='{$mklib->siteurl}/portal/upload/gallery/{$photo['file']}' id='image' border='0' alt='{$photo['title']}' /></a></div>
+                           <div id='detail_open' style="display:block;position:relative;">
+                            <table border='0' width='100%' cellspacing='1' cellpadding='5'>
+                                <tr class="modulecell">
+                                  <td width="20%" align="right"><b>{$mklib->lang['gat_name']}</b></td>
+                                  <td width="80%" align="left">{$photo['title']} {$bookmark}</td>
+                                </tr>
+                                {$addtag}
+                                <tr class="modulecell">
+                                  <td valign="top" align="right"><b>{$mklib->lang['ga_des']}</b></td>
+                                  <td align="left">{$photo['descrizione']}</td>
+                                <tr class="modulecell">
+                                  <td valign="top" align="right"><b>{$mklib->lang['gat_sendby']}</b></td>
+                                  <td align="left"><b><a href='{$photo['autore_link']}={$photo['idauth']}'>{$photo['autore']}</a></b> &nbsp; <a href="/index.php?ind=gallery&amp;op=result_search&amp;campo=4&amp;testo={$photo['autore']}" title="{$mklib->lang['ga_autore']}"><img src="$mklib->images/atb_search.png" alt="{$mklib->lang['ga_autore']}" align="top" /></a></td>
+                                </tr>
+                                <tr class="modulecell">
+                                  <td valign="top" align="right"><b>{$mklib->lang['gat_sdate']}</b></td>
+                                  <td align="left">{$photo['data']}</td>
+                                </tr>
+                                <tr class="modulecell">
+                                  <td valign="top" align="right"><b>{$mklib->lang['gat_wei']}</b></td>
+                                  <td align="left">{$photo['peso']}</td>
+                                </tr>
+                                <tr class="modulecell">
+                                  <td valign="top" align="right"><b>{$mklib->lang['gat_dim']}</b></td>
+                                  <td align="left"><a href='{$mklib->siteurl}/portal/upload/gallery/{$photo['file']}' target='_blank' id='normal'>{$photo['width']} x {$photo['height']}</a>{$photo['wide_image']}</td>
+                                </tr>
+                                <tr class="modulecell">
+                                    <td valign="top" align="right"><b>{$mklib->lang['gat_clicks']}</b></td>
+                                    <td align="left">{$photo['click']}</td>
+                                </tr>
+                                <tr class="modulecell">
+                                  <td valign="top" align="right"><b>{$mklib->lang['rate_score']}</b></td>
+                                  <td align="left" nowrap="nowrap">
+                                  <div id='poll-div'>{$photo['rating']}</div>
+                                 </td>
+                                </tr>
+                            </table>
+                            </div>
+                            <div id='bbcode_open' style="display:none;position:relative;">
+                            <table border='0' cellspacing='1' cellpadding='5' width="100%">
+                                <tr class="modulecell">		
+                                  <td width='50%' align='center'><b>BBCODE</b></td>
+                                  <td width="50%" align='center'><b>HTML</b></td>
+                                </tr>
+                                <tr class="modulecell">
+                                  <td align='center'><textarea cols='10' style='width:95%' rows='4' readonly='readonly' onfocus="this.select()">[URL={$mklib->siteurl}/index.php?ind=gallery&amp;op=foto_show&amp;ida={$photo['id']}][IMG]{$photo['thumb']}[/IMG][/URL]</textarea></td>
+                                  <td align='center'><textarea cols='10' style='width:95%' rows='4' readonly='readonly' onfocus="this.select()">&lt;a href='{$mklib->siteurl}/index.php?ind=gallery&amp;op=foto_show&amp;ida={$photo['id']}'&gt;&lt;img src='{$photo['thumb']}' border='0' alt='animewallpapers.su - {$photo['name']}' title='animewallpapers.su - {$photo['name']}'/&gt;&lt;/a&gt;</textarea></td>
+                                </tr>
+                                <tr class="modulecell">
+                                  <td colspan='2' align='center'><input type='button' value='{$mklib->lang['qr_closeit']}' class='button' accesskey='s' onclick="ShowHide('bbcode_open');" /></td>
+                                </tr>
+                            </table>
+                            </div>
+EOF;
+}
+
+function foto_thumb($desc) {
+global $mkportals, $mklib;
+$detail = "";
+$cnt = 0;
+if ($mklib->modconf['gallery']['thumb_titolo']) {
+	$detail.= "<b>{$desc['titolo']}</b><br/>";
+    $cnt++;
+}
+if ($mklib->modconf['gallery']['thumb_autore']) {
+	$detail.= "<b>{$desc['autore']}</b><br/>";
+    $cnt++;
+}
+if ($mklib->modconf['gallery']['thumb_dimensioni']) {
+	$detail.= $desc['dimensioni']."<br/>";
+    $cnt++;
+}
+if ($mklib->modconf['gallery']['thumb_size']) {
+	$detail.= $desc['size']."<br/>";
+    $cnt++;
+}
+if ($mklib->modconf['gallery']['thumb_rating']) {
+	$detail.= $desc['rating']."<br/>";
+    $cnt++;
+}
+$link = "index.php?ind=gallery&amp;op=foto_show&amp;ida=".$desc['id'];
+if ($mklib->modconf['gallery']['thumb_click']) {
+	$link ="portal/upload/gallery/{$desc['file']}' data-gallery='";
+}
+$width = ($mklib->modconf['gallery']['thb_width']*1.4)."px";
+$height = ($mklib->modconf['gallery']['thb_height']+(20*$cnt))."px";
+return <<<EOF
+
+           <div class='foto_thumb' style='width: $width; height: $height;'>
+                <div class='img-shadow'><a href='{$link}' title='{$desc['titolo']}'>{$desc['foto']}</a></div>
+                <div class='foto_desc'><a href='{$mklib->siteurl}/index.php?ind=gallery&amp;op=foto_show&amp;ida={$desc['id']}'>{$detail}</a></div>
+           </div>
+                
+EOF;
+}
+
+function show_thumbentry($autore, $trate, $rate, $peso, $dimensioni) {
+global $mkportals, $mklib;
+return <<<EOF
+       	<table border='0' width='100%' cellpadding="1" cellspacing="1">
+			<tr>
+                 <td class="mktitlemedium" align="center" nowrap='nowrap'><b>{$autore}</b></td>
+			</tr>
+			<tr>
+                 <td class="modulex" align="center" nowrap='nowrap'><b>{$dimensioni}</b></td>
+			</tr>
+			<tr>
+                 <td class="modulex" align="center" nowrap='nowrap'>{$peso}</td>
+			</tr>
+			<tr>
+                 <td class="modulex" align="center" nowrap='nowrap'>{$rate} ({$trate}) </td>
+			</tr>
+		</table>
+EOF;
+}
+
+function submit_button($cselect) {
+global $mkportals, $mklib;
+if ($mklib->modconf['gallery'][''])
+	$title = "";
+return <<<EOF
+<a href="javascript: ShowHide('submit_open')" class='slidemenu photo_add' title='{$mklib->lang['ga_insertimg']}'>{$mklib->lang['ga_insertimg']}</a>
+<div class='hidemenu' id='submit_open' style="display:none;">
+			<form action='{$mklib->siteurl}/index.php?ind=gallery&amp;op=add_file' name='UPLOAD' method='post' enctype='multipart/form-data'>
+			<table width='100%' border='0'>
+            <tr class='modulex'>
+			<td><b>{$mklib->lang['ga_section']}</b></td>
+			  <td style='text-align:left'>
+			    <select class='bgselect' name='evento' size='1'>
+			    {$cselect}
+			    </select>
+			  </td>
+			</tr>
+            {$title}
+            <tr class='modulex'>
+			  <td width='10%' valign='top'><b>{$mklib->lang['ga_des']}</b></td>
+			  <td width='90%' style='text-align:left'><textarea cols='60' rows='5' name='descrizione' class='bgselect'>{$descrizione}</textarea></td>
+			</tr>
+            <tr class='modulex'>
+			  <td width='10%'><b>{$mklib->lang['ga_file']}</b></td>
+			  <td width='90%' style='text-align:left'><input type='file' accept='image/*' name='FILE_UPLOAD' class='bgselect' /></td>
+			</tr>
+			<tr class='modulex'>
+			  <td width='10%' nowrap='nowrap'><b>{$mklib->lang['ga_file_URL']}</b></td>
+			  <td width='90%' style='text-align:left'><input type='text' name='FILE_URL' class='bgselect' /></td>
+			</tr>
+            <tr>
+            	<td colspan="2"><input type='submit' value='{$mklib->lang['ga_insert']}' class='button' /></td>
+            </tr>
+		    </table>
+            </form>
+</div>
+EOF;
+}
+
+function edit_button($iden, $cselect, $descrizione) {
+global $mkportals, $mklib;
+return <<<EOF
+<a href="javascript: ShowHide('edit_open')" class='slidemenu photo_edit' title='{$mklib->lang['ga_modify']}'>{$mklib->lang['ga_modify']}</a>
+<div class='hidemenu' id='edit_open' style="display:none;">
+			<form action='{$mklib->siteurl}/index.php?ind=gallery&amp;op=update_file&amp;iden=$iden' name='UPLOAD' method='post' enctype='multipart/form-data'>
+			<table width='100%' border='0'>
+            <tr class='modulex'>
+			  <td width='10%' valign='top'><b>{$mklib->lang['ga_des']}</b></td>
+			  <td width='90%' style='text-align:left'><textarea cols='60' rows='5' name='descrizione' class='bgselect'>{$descrizione}</textarea></td>
+			</tr>
+            <tr class='modulex'>
+			<td><b>{$mklib->lang['ga_section']}</b></td>
+			  <td style='text-align:left'>
+			    <select class='bgselect' name='evento' size='1'>
+			    {$cselect}
+			    </select>
+                <input type='submit' value='{$mklib->lang['ga_save']}' class='button' />
+			  </td>
+			</tr>
+		    </table>
+            </form>
+</div>
+EOF;
+}
+
+function add_wide($id) {
+global $mkportals, $mklib;
+return <<<EOF
+ &nbsp; <a href="javascript: ShowHide('addwide_open')" class='slidemenu' title='{$mklib->lang['ga_upload_wide']}'><img src='$mklib->images/plus.png' alt='Add alternative' align='top'/></a>
+			<div class='hidemenu' id='addwide_open' style='display:none;'>
+                <form action='{$mklib->siteurl}/index.php?ind=gallery&amp;op=add_wide&amp;iden={$id}' name='search' method='post' enctype='multipart/form-data'>
+                <table width='100%' border='0'>
+				  <tr class='modulex'>
+					<td width='10%'><b>{$mklib->lang['ga_file']}</b></td>
+					<td width='90%'><input type='file' accept='image/*' name='FILE_UPLOAD' size='70' class='bgselect' /></td>
+				  </tr>
+				  <tr class='modulex'>
+					<td width='10%' valign='top' nowrap='nowrap'><b>{$mklib->lang['ga_file_URL']}</b></td>
+					<td width='90%'><input type='text' name='FILE_URL' size='70' class='bgselect' />
+					<br /> {$mklib->lang['ga_URL']}<br />
+					<input type='submit' value='{$mklib->lang['ga_insert']}' class='button' />
+					</td>
+				  </tr>	
+                </table>
+                </form>
+             </div>
+EOF;
+}
+
+function top_rated($content) {
+global $mkportals, $mklib;
+return <<<EOF
+<div id='modgallery_top' class='block'>
+<h2><img src='$mklib->images/atb_cpapers.png' alt='' align='middle'/><a href='{$mklib->siteurl}/index.php?ind=gallery&amp;op=result_search&amp;campo=1'>{$mklib->lang['ga_toprated']}</a></h2>
+$content
+</div>
+    <div class='clear'></div>
+EOF;
+}
+
+function last_uploads($content) {
+global $mkportals, $mklib;
+return <<<EOF
+<div id='modgallery_last' class='block'>
+<h2><img src='$mklib->images/atb_new.png' alt='' align='middle'/><a href='{$mklib->siteurl}/index.php?ind=gallery&amp;op=result_search&amp;campo=2'>{$mklib->lang['ga_lastuploads']}</a></h2>
+$content
+</div>
+    <div class='clear'></div>
+EOF;
+}
+
+}
+?>
